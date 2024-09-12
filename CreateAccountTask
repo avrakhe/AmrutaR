@@ -1,0 +1,44 @@
+public class Create_user_Account_TestCase {
+
+	public WebDriver driver;
+
+	
+	@Before
+    public void setUp() {
+        // Set the path to the ChromeDriver
+        System.setProperty("webdriver.chrome.driver", "Path to the downloaded Chrome driver");
+        
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://try.vikunja.io/register); //  URL of the signup page
+    }
+
+    @Test
+    public void createAccountWithValidUsername() {
+        // enter a 2-character username
+        WebElement usernameField = driver.findElement(By.id("username")); 
+        usernameField.sendKeys("vb");
+
+        // enter a password
+        WebElement passwordField = driver.findElement(By.id("password")); 
+        passwordField.sendKeys("Password123!");
+
+        // click submit button 
+        WebElement submitButton = driver.findElement(By.id("submit")); 
+        submitButton.click();
+
+        // Read the error message for username validation
+        WebElement errorMessage = driver.findElement(By.id("usernameError")); 
+
+        // Verify that an error message is displayed for short username
+        String expectedError = "Username must have at least 3 characters"; 
+        assertEquals(expectedError, errorMessage.getText());
+    }
+
+    @After
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit(); // Close the browser
+        }
+    }
+}
